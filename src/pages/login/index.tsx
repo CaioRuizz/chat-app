@@ -5,7 +5,9 @@ import Api from "../../services/Api";
 import {AxiosResponse} from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-type Props = {};
+type Props = {
+    navigation: any,
+};
 
 type State = {
     email: string,
@@ -58,7 +60,11 @@ export default class LoginPage extends React.Component<Props, State> {
 
     authenticate = async () => {
         const token = await AsyncStorage.getItem('token')
-        console.log(token)
+        if (token) {
+            this.props.navigation.navigate('ListarConversas', {
+                token,
+            });
+        }
     }
 
     handleLogin = async () => {
