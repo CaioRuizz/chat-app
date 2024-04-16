@@ -68,6 +68,17 @@ export default class ListaConversasPage extends React.Component<Props, State> {
                         </View>
                     </TouchableOpacity>
                 )}
+                <TouchableOpacity onPress={() => {
+                    this.props.navigation.navigate('NovaConversa', {
+                        token: this.props.route.params.token,
+                    })
+                }}>
+                    <View style={Styles.listElement}>
+                        <Text>
+                            Nova Conversa
+                        </Text>
+                    </View>
+                </TouchableOpacity>
             </ScrollView>
         );
     }

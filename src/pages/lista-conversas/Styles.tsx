@@ -3,7 +3,7 @@ import {StyleSheet} from "react-native";
 const _default = StyleSheet.create({
     container: {
         flex: 1,
-        marginTop: 20
+        marginTop: 20,
     },
     listElement: {
         width: '100%',

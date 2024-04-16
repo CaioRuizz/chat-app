@@ -4,6 +4,7 @@ import {NavigationContainer} from "@react-navigation/native";
 import LoginPage from "./pages/login";
 import ListaConversasPage from "./pages/lista-conversas";
 import ConversaPage from "./pages/conversa";
+import NovaConversaPage from "./pages/nova-conversa";
 
 type Props = {};
 
@@ -30,6 +31,11 @@ export default class Router extends React.Component<Props, State> {
                     <Stack.Screen
                         name="Conversa"
                         component={ConversaPage}
+                        options={{title: 'Caio Chat - Conversa'}}
+                    />
+                    <Stack.Screen
+                        name="NovaConversa"
+                        component={NovaConversaPage}
                         options={{title: 'Caio Chat - Conversa'}}
                     />
                 </Stack.Navigator>
