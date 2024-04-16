@@ -49,11 +49,18 @@ export default class ListaConversasPage extends React.Component<Props, State> {
 
     }
 
+    consversarCom = (user: string) => {
+        this.props.navigation.navigate('Conversa', {
+            user,
+            token: this.props.route.params.token,
+        })
+    }
+
     render() {
         return (
             <ScrollView contentContainerStyle={Styles.container}>
                 {this.state.conversas.map((c, i) =>
-                    <TouchableOpacity key={i}>
+                    <TouchableOpacity key={i} onPress={() => this.consversarCom(c)}>
                         <View style={Styles.listElement}>
                             <Text>
                                 {c}
