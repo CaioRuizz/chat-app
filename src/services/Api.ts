@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const Api = new axios.Axios({
+const Api = axios.create({
     baseURL: 'https://vm.caioruiz.com/chat-backend',
     headers: {
         'Content-Type': 'application/json',

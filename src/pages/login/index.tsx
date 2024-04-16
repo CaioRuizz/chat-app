@@ -81,7 +81,9 @@ export default class LoginPage extends React.Component<Props, State> {
         }
 
         else if (response.status == 200) {
-            const responseBody = JSON.parse(response.data) as AuthResponse;
+            const responseBody = typeof response.data === 'object' ?
+                response.data :
+                JSON.parse(response.data) as AuthResponse;
             await AsyncStorage.setItem('token', responseBody.token);
             await this.authenticate();
         }

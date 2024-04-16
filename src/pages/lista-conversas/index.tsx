@@ -41,8 +41,9 @@ export default class ListaConversasPage extends React.Component<Props, State> {
                     token: this.token,
                 }
             });
-            const responseObject = JSON.parse(response.data) as ListaConversasResponse;
-            console.log(responseObject)
+            const responseObject = typeof response.data === 'object' ?
+                response.data :
+                JSON.parse(response.data) as ListaConversasResponse;
             this.setConversas(responseObject.chatsUsername);
         }
 
@@ -52,8 +53,8 @@ export default class ListaConversasPage extends React.Component<Props, State> {
         return (
             <ScrollView contentContainerStyle={Styles.container}>
                 {this.state.conversas.map((c, i) =>
-                    <TouchableOpacity>
-                        <View key={i} style={Styles.listElement}>
+                    <TouchableOpacity key={i}>
+                        <View style={Styles.listElement}>
                             <Text>
                                 {c}
                             </Text>
