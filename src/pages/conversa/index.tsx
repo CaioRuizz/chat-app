@@ -102,7 +102,7 @@ export default class ConversaPage extends React.Component<Props, State> {
     render() {
         return (
             <KeyboardAvoidingView
-                behavior={Platform.OS === "ios" ? "padding" : "height"}
+                behavior={Platform.OS === "ios" ? "padding" : undefined}
                 style={Styles.container}
             >
                 <ScrollView
