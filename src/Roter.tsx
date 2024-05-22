@@ -20,23 +20,23 @@ export default class Router extends React.Component<Props, State> {
                     <Stack.Screen
                         name="Home"
                         component={LoginPage}
-                        options={{title: 'Caio Chat - Login'}}
+                        options={{title: 'Chat - Login'}}
                     />
                     <
                         Stack.Screen
                         name="ListarConversas"
                         component={ListaConversasPage}
-                        options={{title: 'Caio Chat - Conversas'}}
+                        options={{title: 'Chat - Conversas'}}
                     />
                     <Stack.Screen
                         name="Conversa"
                         component={ConversaPage}
-                        options={{title: 'Caio Chat - Conversa'}}
+                        options={{title: 'Chat - Conversa'}}
                     />
                     <Stack.Screen
                         name="NovaConversa"
                         component={NovaConversaPage}
-                        options={{title: 'Caio Chat - Conversa'}}
+                        options={{title: 'Chat - Nova Conversa'}}
                     />
                 </Stack.Navigator>
             </NavigationContainer>
