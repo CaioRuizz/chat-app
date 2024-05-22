@@ -1,5 +1,5 @@
 import React from "react";
-import {Animated, ScrollView, Text, TouchableOpacity} from "react-native";
+import {Animated, Button, ScrollView, Text, TouchableOpacity} from "react-native";
 import Styles from "./Styles";
 import View = Animated.View;
 import api from "../../services/Api";
@@ -36,17 +36,21 @@ export default class ListaConversasPage extends React.Component<Props, State> {
     componentDidMount = async () => {
         this.token = this.props?.route?.params?.token;
         if (this.token) {
-            const response = await api.get('/lista-conversas', {
-                headers: {
-                    token: this.token,
-                }
-            });
-            const responseObject = typeof response.data === 'object' ?
-                response.data :
-                JSON.parse(response.data) as ListaConversasResponse;
-            this.setConversas(responseObject.chatsUsername);
+            // console.log(this.token)
+            this.loadConversa()
         }
+    }
 
+    loadConversa = async () => {
+        const response = await api.get('/lista-conversas', {
+            headers: {
+                token: this.token,
+            }
+        });
+        const responseObject = typeof response.data === 'object' ?
+            response.data :
+            JSON.parse(response.data) as ListaConversasResponse;
+        this.setConversas(responseObject.chatsUsername);
     }
 
     consversarCom = (user: string) => {
@@ -59,6 +63,14 @@ export default class ListaConversasPage extends React.Component<Props, State> {
     render() {
         return (
             <ScrollView contentContainerStyle={Styles.container}>
+                <Button title="Recarregar" onPress={this.loadConversa} />
+                <TouchableOpacity onPress={() => this.consversarCom('')}>
+                    <View style={Styles.listElement}>
+                        <Text>
+                            Chat Global
+                        </Text>
+                    </View>
+                </TouchableOpacity>
                 {this.state.conversas.map((c, i) =>
                     <TouchableOpacity key={i} onPress={() => this.consversarCom(c)}>
                         <View style={Styles.listElement}>

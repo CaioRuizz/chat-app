@@ -2,6 +2,7 @@ import React from "react";
 import {Alert, KeyboardAvoidingView, Platform, Text, TextInput, TouchableOpacity, View} from "react-native";
 import api from "../../services/Api";
 import Styles from "./Styles";
+import {Picker, PickerIOS} from "@react-native-picker/picker";
 
 type Props = {
     route: any,
@@ -11,6 +12,11 @@ type Props = {
 type State = {
     user: string,
     message: string,
+    users: string[],
+}
+
+type usernamesApiResponse  = {
+    username: string,
 }
 
 export default class NovaConversaPage extends React.Component<Props, State> {
@@ -20,6 +26,7 @@ export default class NovaConversaPage extends React.Component<Props, State> {
         this.state = {
             message: '',
             user: '',
+            users: [],
         }
     }
 
@@ -48,22 +55,41 @@ export default class NovaConversaPage extends React.Component<Props, State> {
     }
 
     componentDidMount = async () => {
-
+        const response = await api.get('/lista-usuarios',{
+            headers: {
+                token: this.props.route.params.token,
+            }
+        })
+        const users = response.data.map((d: usernamesApiResponse) => d.username)
+        this.setState({ users })
+        // console.log(users)
+        // console.log(Date.now())
     }
 
-    render() {
+
+    render = () => {
+        // console.log(this.state)
         return <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={Styles.container}>
             <View style={Styles.chat}>
                 <View style={Styles.linha}>
-                    <Text>Enviar para: </Text>
-                    <TextInput
-                        style={Styles.input}
-                        value={this.state.user}
-                        onChangeText={this.setUser}
-                        placeholder="username"
-                    />
+                    <Text style={{marginTop: 20}}>Enviar para: </Text>
+                    <Picker
+                        selectedValue={this.state.user}
+                        onValueChange={(value) => {
+                            this.setState({user: value})
+                        }}
+                        style={{
+                            width: 300,
+                            height: 50,
+                        }}
+                        enabled={true}
+                    >
+                        {this.state.users.map(u => (
+                            <Picker.Item label={u} value={u} key={u} />
+                        ))}
+                    </Picker>
                 </View>
             </View>
             <View style={Styles.inputView}>

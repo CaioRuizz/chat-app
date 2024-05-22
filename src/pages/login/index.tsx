@@ -10,9 +10,7 @@ type Props = {
 };
 
 type State = {
-    email: string,
     username: string,
-    isSettingUsername: boolean,
 };
 
 type AuthResponse = {
@@ -27,35 +25,23 @@ export default class LoginPage extends React.Component<Props, State> {
         super(props);
 
         this.state = {
-            email: '',
             username: '',
-            isSettingUsername: false,
         };
-    }
-
-    setEmail = (email: string) => {
-        this.setState({ email })
     }
 
     setUsername = (username: string) => {
         this.setState({ username })
     }
 
-    setUsernameOnApi = async (email: string, username: string) => {
-        return await Api.post('/altera-username', JSON.stringify({
-            email,
-            username,
-        }));
-    }
-
-    sendApiCallLogin = async (email: string) => {
+    sendApiCallLogin = async (username: string) => {
+        // console.log(`autenticando ${username}`)
         return await Api.post('/login', JSON.stringify({
-            email
+            username
         }));
     }
 
     componentDidMount = async () => {
-        await this.authenticate();
+        // await this.authenticate();
     }
 
     authenticate = async () => {
@@ -70,17 +56,11 @@ export default class LoginPage extends React.Component<Props, State> {
     handleLogin = async () => {
         Keyboard.dismiss();
 
-        if (this.state.isSettingUsername) {
-            const response = await this.setUsernameOnApi(this.state.email, this.state.username);
-            if (response.status != 200) return console.log(response.data);
-        }
-        const response: AxiosResponse = await this.sendApiCallLogin(this.state.email);
+        const response: AxiosResponse = await this.sendApiCallLogin(this.state.username);
 
-        if ([403, 201].includes(response.status)) {
-            this.setState({ isSettingUsername: true });
-        }
+        // console.log(response)
 
-        else if (response.status == 200) {
+        if (response.status == 201) {
             const responseBody = typeof response.data === 'object' ?
                 response.data :
                 JSON.parse(response.data) as AuthResponse;
@@ -99,22 +79,12 @@ export default class LoginPage extends React.Component<Props, State> {
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                 style={Styles.container}>
                 <TextInput
-                    value={this.state.email}
-                    onChangeText={this.setEmail}
-                    placeholder="E-mail"
+                    value={this.state.username}
+                    onChangeText={this.setUsername}
                     autoCapitalize="none"
-                    keyboardType="email-address"
+                    placeholder="Nome de usuário"
                     style={Styles.input}
                 />
-                {this.state.isSettingUsername && (
-                    <TextInput
-                        value={this.state.username}
-                        onChangeText={this.setUsername}
-                        autoCapitalize="none"
-                        placeholder="Nome de usuário"
-                        style={Styles.input}
-                    />
-                )}
                 <TouchableOpacity style={Styles.button} onPress={this.handleLogin}>
                     <Text style={Styles.buttonText}>Login</Text>
                 </TouchableOpacity>

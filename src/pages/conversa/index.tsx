@@ -19,6 +19,7 @@ type Message = {
     message: string;
     received: boolean;
     sentAt: string;
+    sentBy?: string;
 };
 
 type State = {
@@ -51,6 +52,7 @@ export default class ConversaPage extends React.Component<Props, State> {
         const responseData = (typeof response.data === "object"
             ? response.data
             : JSON.parse(response.data)) as Message[];
+
         this.setState({
             messages: responseData.sort(
                 (a, b) =>
@@ -85,13 +87,14 @@ export default class ConversaPage extends React.Component<Props, State> {
             JSON.stringify({
                 message: this.state.message,
                 toUsername: this.props.route.params.user,
+                all: !this.props.route.params.user
             }),
             {
                 headers: {
                     token: this.props.route.params.token,
                 },
             }
-        );
+        ).catch(console.log);
         this.setState({ message: "" });
         await this.componentDidMount();
     };
@@ -114,6 +117,7 @@ export default class ConversaPage extends React.Component<Props, State> {
                                 key={i}
                                 style={[Styles.cell, m.received ? Styles.received : Styles.sent]}
                             >
+                                {!!m.sentBy && m.received && <Text>{m.sentBy}: </Text>}
                                 <Text>{m.message}</Text>
                                 <Text>
                                     {new Date(m.sentAt).toLocaleDateString("pt-br")} -{" "}
