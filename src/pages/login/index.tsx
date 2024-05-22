@@ -1,7 +1,7 @@
 import React from "react";
 import {Keyboard, KeyboardAvoidingView, Platform, Text, TextInput, TouchableOpacity} from "react-native";
 import Styles from "./Styles";
-import Api from "../../services/Api";
+import Api, { defaultUrl } from "../../services/Api";
 import {AxiosResponse} from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -23,7 +23,7 @@ type AuthResponse = {
 export default class LoginPage extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
-
+        
         this.state = {
             username: '',
         };
@@ -35,7 +35,8 @@ export default class LoginPage extends React.Component<Props, State> {
 
     sendApiCallLogin = async (username: string) => {
         // console.log(`autenticando ${username}`)
-        return await Api.post('/login', JSON.stringify({
+        const url = (await AsyncStorage.getItem('url')) ?? defaultUrl;
+        return await Api(url).post('/login', JSON.stringify({
             username
         }));
     }

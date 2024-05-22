@@ -8,8 +8,9 @@ import {
     TouchableOpacity,
     View,
 } from "react-native";
-import api from "../../services/Api";
+import api, { defaultUrl } from "../../services/Api";
 import Styles from "./Styles";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type Props = {
     route: any;
@@ -41,7 +42,8 @@ export default class ConversaPage extends React.Component<Props, State> {
     }
 
     componentDidMount = async () => {
-        const response = await api.get(
+        const url = (await AsyncStorage.getItem('url')) ?? defaultUrl;
+        const response = await api(url).get(
             `/ler-conversa/${this.props.route.params.user}`,
             {
                 headers: {
@@ -82,7 +84,8 @@ export default class ConversaPage extends React.Component<Props, State> {
     };
 
     sendMessage = async () => {
-        await api.post(
+        const url = (await AsyncStorage.getItem('url')) ?? defaultUrl;
+        await api(url).post(
             "/envia-mensagem",
             JSON.stringify({
                 message: this.state.message,

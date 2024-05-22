@@ -2,7 +2,8 @@ import React from "react";
 import {Animated, Button, ScrollView, Text, TouchableOpacity} from "react-native";
 import Styles from "./Styles";
 import View = Animated.View;
-import api from "../../services/Api";
+import api, { defaultUrl } from "../../services/Api";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type Props = {
     token: string,
@@ -42,7 +43,8 @@ export default class ListaConversasPage extends React.Component<Props, State> {
     }
 
     loadConversa = async () => {
-        const response = await api.get('/lista-conversas', {
+        const url = (await AsyncStorage.getItem('url')) ?? defaultUrl;
+        const response = await api(url).get('/lista-conversas', {
             headers: {
                 token: this.token,
             }

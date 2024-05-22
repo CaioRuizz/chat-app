@@ -1,8 +1,9 @@
 import React from "react";
 import {Alert, KeyboardAvoidingView, Platform, Text, TextInput, TouchableOpacity, View} from "react-native";
-import api from "../../services/Api";
+import api, { defaultUrl } from "../../services/Api";
 import Styles from "./Styles";
 import {Picker, PickerIOS} from "@react-native-picker/picker";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type Props = {
     route: any,
@@ -39,7 +40,8 @@ export default class NovaConversaPage extends React.Component<Props, State> {
     }
 
     sendMessage = async () => {
-        const response = await api.post('/envia-mensagem', JSON.stringify({
+        const url = (await AsyncStorage.getItem('url')) ?? defaultUrl;
+        const response = await api(url).post('/envia-mensagem', JSON.stringify({
             message: this.state.message,
             toUsername: this.state.user,
         }), {
@@ -55,7 +57,8 @@ export default class NovaConversaPage extends React.Component<Props, State> {
     }
 
     componentDidMount = async () => {
-        const response = await api.get('/lista-usuarios',{
+        const url = (await AsyncStorage.getItem('url')) ?? defaultUrl;
+        const response = await api(url).get('/lista-usuarios',{
             headers: {
                 token: this.props.route.params.token,
             }
