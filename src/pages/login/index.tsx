@@ -36,8 +36,9 @@ export default class LoginPage extends React.Component<Props, State> {
     sendApiCallLogin = async (username: string) => {
         // console.log(`autenticando ${username}`)
         const url = (await AsyncStorage.getItem('url')) ?? defaultUrl;
+        console.log(username.toLocaleLowerCase())
         return await Api(url).post('/login', JSON.stringify({
-            username
+            username: username.toLowerCase(),
         }));
     }
 
